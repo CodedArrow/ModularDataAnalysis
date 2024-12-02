@@ -8,7 +8,7 @@ use quick_xml::name::QName;
 fn main() {
     let mut files = Vec::new();
     // 5 8 11 4 13 0 12 4 
-    println!("Enter the filenames of the Nmap XML files you want to import (separated by spaces):");
+    println!("Enter the filenames of the Nmap XML files you want to import with format filename.xml (separated by spaces):");
     let mut input = String::new();
     std::io::stdin().read_line(&mut input).expect("Failed to read line");
     let filenames: Vec<&str> = input.trim().split_whitespace().collect();
