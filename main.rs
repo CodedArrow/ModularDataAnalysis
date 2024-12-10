@@ -4,7 +4,9 @@
 mod Graphing;
 pub mod Nmap;
 use Graphing::graph;
+use Nmap::nmapMapping;
 
 fn main() {
+    nmapMapping();
     graph();
 }

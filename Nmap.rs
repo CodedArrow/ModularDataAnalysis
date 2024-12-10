@@ -15,9 +15,9 @@ struct entry {
 }
 #[derive(Default, Debug)]
 pub struct entryData {
-    port: String,
-    state: String,
-    service: String,
+    pub port: String,
+    pub state: String,
+    pub service: String,
 }
 
 pub fn nmapMapping (){

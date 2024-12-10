@@ -5,7 +5,12 @@ const OUT_FILE_NAME: &str = "plotters-doc-data/frequency.png";
 pub fn graph() -> Result<(), Box<dyn std::error::Error>> {
     let sd = 0.60;
 
-    let nmap_points: entryData;
+    let nmap_points = entryData::default();
+
+    let ports = nmap_points.port
+        .split(' ')
+        .map(|s| s.parse::<f64>().unwrap())
+        .collect::<Vec<f64>>();
 
     let root = BitMapBackend::new(OUT_FILE_NAME, (1024, 768)).into_drawing_area();
 
@@ -36,7 +41,7 @@ pub fn graph() -> Result<(), Box<dyn std::error::Error>> {
     let actual = Histogram::vertical(chart.borrow_secondary())
         .style(RED.filled())
         .margin(3)
-        .data(nmap_points.iter().map(|x| (*x, 1)));
+        .data(ports.iter().map(|x| (*x, 1)));
 
     chart
         .draw_secondary_series(actual)?
