@@ -9,9 +9,9 @@ use quick_xml::name::QName;
 
 
 #[derive(Default, Debug)]
-struct entry {
-    entries: Vec<entryData>,
-    ip: String,
+pub struct entry {
+    pub entries: Vec<entryData>,
+    pub ip: String,
 }
 #[derive(Default, Debug)]
 pub struct entryData {
@@ -20,7 +20,7 @@ pub struct entryData {
     pub service: String,
 }
 
-pub fn nmapMapping (){
+pub fn nmapMapping ()->Vec<entry>{
     // 5 8 11 4 13 0 12 4 
     println!("Enter the filenames of the Nmap XML files you want to import (separated by spaces):");
     let mut input = String::new();
@@ -98,14 +98,15 @@ pub fn nmapMapping (){
                 Err(e) => panic!("Error at position {}: {:?}", reader.buffer_position(), e),
                 _ => (),
             }
-            
         }
         scan.entries.push(entryD);
         entries.push(scan);
+
     };
 
     // 15 17 8 13 19
-    for file in entries {
-        println!("{:?}", file);
-    }
+    for file in &entries {
+        println!("{:?}", file)
+    } 
+    return entries;
 }

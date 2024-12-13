@@ -1,16 +1,18 @@
 use plotters::prelude::*;
-use crate::Nmap::entryData;
+use crate::Nmap::{entry, entryData};
 
 const OUT_FILE_NAME: &str = "plotters-doc-data/frequency.png";
-pub fn graph() -> Result<(), Box<dyn std::error::Error>> {
+pub fn graph(entries:Vec<entry>) -> Result<(), Box<dyn std::error::Error>> {
     let sd = 0.60;
 
-    let nmap_points = entryData::default();
-
-    let ports = nmap_points.port
-        .split(' ')
-        .map(|s| s.parse::<f64>().unwrap())
-        .collect::<Vec<f64>>();
+    let mut ports = Vec::new();
+        for client in entries {
+        for data in client.entries {
+        for port in data.port.split(' ').map(|p| p.parse::<f64>().unwrap()) {
+      ports.push(port);
+            }
+        }
+    }
 
     let root = BitMapBackend::new(OUT_FILE_NAME, (1024, 768)).into_drawing_area();
 
@@ -22,9 +24,9 @@ pub fn graph() -> Result<(), Box<dyn std::error::Error>> {
         .set_label_area_size(LabelAreaPosition::Left, 60)
         .set_label_area_size(LabelAreaPosition::Bottom, 60)
         .set_label_area_size(LabelAreaPosition::Right, 60)
-        .build_cartesian_2d(-4f64..4f64, 0f64..0.1)?
+        .build_cartesian_2d(0f64..60000f64, 0f64..0.1)?
         .set_secondary_coord(
-            (-4f64..4f64).step(0.1).use_round().into_segmented(),
+            (0f64..60000f64).step(0.1).use_round().into_segmented(),
             0u32..500u32,
         );
 
@@ -32,7 +34,6 @@ pub fn graph() -> Result<(), Box<dyn std::error::Error>> {
         .configure_mesh()
         .disable_x_mesh()
         .disable_y_mesh()
-        .y_label_formatter(&|y| format!("{:.0}%", *y * 100.0))
         .y_desc("Frequency")
         .draw()?;
 
@@ -67,8 +68,4 @@ pub fn graph() -> Result<(), Box<dyn std::error::Error>> {
     chart.configure_series_labels().draw()?;
 
     Ok(())
-}
-#[test]
-fn entry_point() {
-    graph().unwrap()
 }

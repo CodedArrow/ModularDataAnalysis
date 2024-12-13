@@ -4,9 +4,9 @@
 mod Graphing;
 pub mod Nmap;
 use Graphing::graph;
-use Nmap::nmapMapping;
+use Nmap::{entryData, nmapMapping};
 
 fn main() {
-    nmapMapping();
-    graph();
+    let entries=nmapMapping();
+    graph(entries);
 }
