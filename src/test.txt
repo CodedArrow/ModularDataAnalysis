@@ -1,0 +1,36 @@
+use plotters::prelude::*;
+use std::collections::HashMap;
+pub fn graph() -> Result<(), Box<dyn std::error::Error>> {
+    // Example data: frequency of port usage
+    let mut port_frequency: HashMap<u16, u32> = HashMap::new();
+    port_frequency.insert(80, 100);
+    port_frequency.insert(443, 200);
+    port_frequency.insert(22, 50);
+    port_frequency.insert(3306, 75);
+    port_frequency.insert(8080, 125);
+
+    // Create a new SVG backend
+    let root = BitMapBackend::new("port_frequency.svg", (640, 480)).into_drawing_area();
+    root.fill(&WHITE)?;
+
+    // Create a new chart
+    let mut chart= ChartBuilder::on(&root)
+        .caption("Port Frequency Usage", ("sans-serif", 40))
+        .margin(5)
+        .x_label_area_size(30)
+        .y_label_area_size(40)
+        .build_cartesian_2d(0..=1000, 0..=port_frequency.len() as u32)?;
+
+    // Set the x-axis and y-axis labels
+    chart.configure_mesh().draw()?;
+
+    // Draw the bars for each port frequency
+    for (i, (port, frequency)) in port_frequency.iter().enumerate() {
+        chart.draw_series(Rectangle::new(
+            [(i as u32 * 100, 0), ((i + 1) as u32 * 100, *frequency)],
+            &BLUE.mix(0.5),
+        ))?;
+    }
+
+    Ok(())
+}
