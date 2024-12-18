@@ -6,7 +6,7 @@
 Support for:
 (check indicates functional, x indicates future project/WIP)                                                  
 ✅ Nmap                         
-❌ Wireshark                                                    
+✅ Wireshark                                                    
 ❌ Metasploit                                               
 ❌ Hashcat/JohnTheRipper                                           
 ❌ OWASP                                        
